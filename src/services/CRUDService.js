@@ -36,4 +36,17 @@ let hashUserPassword = (password) => {
     })
 }
 
-module.exports = {createNewUser};
+let getAllUser = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = db.User.findAll({
+                raw: true
+            })
+            resolve(users);
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+module.exports = {createNewUser, getAllUser};
