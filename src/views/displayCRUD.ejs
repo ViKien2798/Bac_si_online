@@ -31,6 +31,7 @@
                     <th scope="col">Address</th>
                     <th scope="col">Gender</th>
                     <th scope="col">Phone Number</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -43,6 +44,10 @@
                         <td><%= data[i].address %></td>
                         <td><%= data[i].gender %></td>
                         <td><%= data[i].phoneNumber %></td>
+                        <td>
+                            <a href="/edit-crud?id=<%= data[i].id %>" role="button" class="btn btn-info btn-sm">Edit</a>
+                            <a href="/delete-crud?id=<%= data[i].id %>" role="button" class="btn btn-danger btn-sm ">Delete</a>
+                        </td>
                     </tr>
                   <% } %>
                 </tbody>

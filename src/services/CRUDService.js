@@ -1,5 +1,6 @@
 import db from '../models/index';
-var bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
+
 const salt = bcrypt.genSaltSync(10);
 
 
@@ -13,9 +14,9 @@ let createNewUser = async (data) => {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 address: data.address,
+                phoneNumber: data.phoneNumber,
                 gender: data.gender === '1' ? true : false,
                 roleId: data.roleId,
-                phoneNumber: data.phoneNumber,
                 
             })
             resolve('ok! created successfully');
@@ -48,5 +49,68 @@ let getAllUser = () => {
         }
     })
 }
-
-module.exports = {createNewUser, getAllUser};
+let getUserInfoById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { id: userId},
+                raw: true,
+            });
+            if (user) {
+                resolve(user);
+            } else {
+                resolve({});
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+let updateUserData = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { id: data.id },
+                // where bị lỗi ko bit tại sao ko nhận  value id
+                
+                
+            });
+            if (user) {
+                user.firstName = data.firstName;
+                user.lastName = data.lastName;
+                user.address = data.address;
+                user.phoneNumber = data.phoneNumber;
+                await user.save();
+                let allUser = await db.findAll();
+                resolve(allUser);
+            } else {
+                resolve();
+            }
+            
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+let deleteUserById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { id: id }
+            });
+            if(user){
+                await user.destroy();
+            }
+            resolve()
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+module.exports = {
+    createNewUser, 
+    getAllUser, 
+    getUserInfoById, 
+    updateUserData,
+    deleteUserById,
+};
